@@ -1,4 +1,4 @@
-package org.shamshad.model;
+package org.shamshad.models;
 
 import java.util.ArrayList;
 import java.util.List;

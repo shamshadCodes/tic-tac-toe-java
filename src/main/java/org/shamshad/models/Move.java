@@ -1,4 +1,4 @@
-package org.shamshad.model;
+package org.shamshad.models;
 
 public class Move {
     private Player player;
