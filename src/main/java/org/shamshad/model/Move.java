@@ -2,11 +2,11 @@ package org.shamshad.model;
 
 public class Move {
     private Player player;
-    private Cell currentCell;
+    private Cell cell;
 
     public Move(Player player, Cell cell) {
         this.player = player;
-        this.currentCell = cell;
+        this.cell = cell;
     }
 
     public Player getPlayer() {
@@ -18,10 +18,10 @@ public class Move {
     }
 
     public Cell getNewCell() {
-        return currentCell;
+        return cell;
     }
 
     public void setNewCell(Cell cell) {
-        this.currentCell = cell;
+        this.cell = cell;
     }
 }
