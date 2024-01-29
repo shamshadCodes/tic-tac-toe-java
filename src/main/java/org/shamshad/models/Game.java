@@ -1,5 +1,6 @@
 package org.shamshad.models;
 
+import org.shamshad.exceptions.InvalidGameParamsException;
 import org.shamshad.strategies.winningStrategies.WinningStrategy;
 
 import java.util.ArrayList;
@@ -9,18 +10,18 @@ import java.util.Set;
 
 public class Game {
     private Board board;
-    private List<Player> playerList;
+    private List<Player> players;
     private int playerTurnIndex;
-    private List<Move> moveList;
+    private List<Move> moves;
     private Player winner;
     private GameStatus gameStatus;
     private List<WinningStrategy> winningStrategies;
 
-    private Game(int dimension, List<Player> playerList, List<WinningStrategy> winningStrategies) {
+    private Game(int dimension, List<Player> players, List<WinningStrategy> winningStrategies) {
         this.board = new Board(dimension);
-        this.playerList = playerList;
+        this.players = players;
         this.playerTurnIndex = 0;
-        this.moveList = new ArrayList<>();
+        this.moves = new ArrayList<>();
 //        this.winner = winner;
         this.gameStatus = GameStatus.IN_PROGRESS;
         this.winningStrategies = winningStrategies;
@@ -53,8 +54,48 @@ public class Game {
             return this;
         }
 
-        public Game build() {
-            return new Game(dimension, players, winningStrategies);
+
+        private boolean valid() {
+            if (this.players.size() < 2) {
+                return false;
+            }
+
+            if (this.players.size() != this.dimension - 1) {
+                return false;
+            }
+
+            int botCount = 0;
+
+            for (Player player : this.players) {
+                if (player.getPlayerType().equals(PlayerType.BOT)) {
+                    botCount += 1;
+                }
+            }
+
+            if (botCount >= 2) {
+                return false;
+            }
+
+            Set<Character> existingSymbols = new HashSet<>();
+
+            for (Player player : players) {
+                if (existingSymbols.contains(player.getSymbol().getCharacter())) {
+                    return false;
+                }
+
+                existingSymbols.add(player.getSymbol().getCharacter());
+            }
+
+            return true;
+        }
+
+        public Game build() throws InvalidGameParamsException {
+            if (!valid()) {
+                throw new InvalidGameParamsException("Invalid params for game");
+            }
+            return new Game(
+                    dimension, players, winningStrategies
+            );
         }
     }
 }

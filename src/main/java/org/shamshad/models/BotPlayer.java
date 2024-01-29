@@ -3,8 +3,8 @@ package org.shamshad.models;
 public class BotPlayer extends Player{
     private BotDifficultyLevel botDifficultyLevel;
 
-    public BotPlayer(String name, Symbol symbol, PlayerType playerType, BotDifficultyLevel botDifficultyLevel) {
-        super(name, symbol, playerType);
+    public BotPlayer(String name, Symbol symbol, BotDifficultyLevel botDifficultyLevel) {
+        super(name, symbol, PlayerType.BOT);
         this.botDifficultyLevel = botDifficultyLevel;
     }
 
