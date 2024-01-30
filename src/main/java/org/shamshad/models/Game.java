@@ -111,6 +111,29 @@ public class Game {
         return board.getBoard().get(row).get(col).getCellState().equals(CellState.FREE);
     }
 
+    public void undo() {
+        if (moves.isEmpty()) {
+            System.out.println("No move. Can't undo.");
+            return;
+        }
+
+        Move lastMove = moves.get(moves.size() - 1);
+
+        for (WinningStrategy winningStrategy: winningStrategies) {
+            winningStrategy.undoLastMove(lastMove, board);
+        }
+
+        Cell cellInBoard = lastMove.getCell();
+        cellInBoard.setCellState(CellState.FREE);
+        cellInBoard.setPlayer(null);
+
+        moves.remove(lastMove);
+
+        playerTurnIndex -= 1;
+        playerTurnIndex += players.size();
+        playerTurnIndex %= players.size();
+    }
+
     public void makeMove() {
         Player currentPlayer = players.get(playerTurnIndex);
         System.out.println("It is " + currentPlayer.getName() + "'s turn.");
