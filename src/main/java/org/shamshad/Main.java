@@ -42,19 +42,23 @@ public class Main {
             return;
         }
 
-        System.out.println("This is how board looks like:");
-        // print board
-        gameController.displayBoard(game);
-        // print if undo
-        System.out.println("Does anyone want to undo? (y/n)");
-        // if yes -> call undo
-        String input = scanner.next();
+        while(gameController.getGameStatus(game).equals(GameStatus.IN_PROGRESS)){
+            // printing the board
+            gameController.displayBoard(game);
 
-        if (input.equalsIgnoreCase("y")) {
-            gameController.undo(game);
-        } else {
-            // move next player
-            gameController.makeMove(game);
+            // Check if someone wants to undo the last move
+            System.out.println("Does anyone want to undo? (y/n)");
+            String undoRequired = scanner.next();
+
+            if (!game.getMoves().isEmpty() && undoRequired.equalsIgnoreCase("y")) {
+                gameController.undo(game);
+            } else {
+                if(!game.getMoves().isEmpty()){
+                    System.out.println("First move of the game. Undo not possible!");
+                }
+                // move next player
+                gameController.makeMove(game);
+            }
         }
     }
 }
