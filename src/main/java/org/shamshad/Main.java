@@ -22,6 +22,7 @@ public class Main {
         System.out.println("-------------- Game is starting --------------");
 
         // Input player's name
+        System.out.println("Enter your name:");
         String playerName = scanner.next();
 
         int dimension = 3;
@@ -53,12 +54,15 @@ public class Main {
             if (!game.getMoves().isEmpty() && undoRequired.equalsIgnoreCase("y")) {
                 gameController.undo(game);
             } else {
-                if(!game.getMoves().isEmpty()){
+                if(game.getMoves().isEmpty()){
                     System.out.println("First move of the game. Undo not possible!");
                 }
                 // move next player
                 gameController.makeMove(game);
             }
         }
+
+        gameController.printResult(game);
+        gameController.displayBoard(game);
     }
 }

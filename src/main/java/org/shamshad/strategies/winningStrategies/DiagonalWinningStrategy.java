@@ -26,8 +26,8 @@ public class DiagonalWinningStrategy implements WinningStrategy{
 
     @Override
     public boolean checkWinner(Move move, Board board) {
-        int row = move.getNewCell().getRow();
-        int col = move.getNewCell().getCol();
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
         Symbol symbol = move.getPlayer().getSymbol();
 
         if (row == col) {
@@ -53,8 +53,8 @@ public class DiagonalWinningStrategy implements WinningStrategy{
 
     @Override
     public void undoLastMove(Move move, Board board) {
-        int row = move.getNewCell().getRow();
-        int col = move.getNewCell().getCol();
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
         Symbol symbol = move.getPlayer().getSymbol();
 
         if (row == col) {
