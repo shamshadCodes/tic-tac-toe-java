@@ -24,7 +24,7 @@ public class RowWinningStrategy implements WinningStrategy{
     }
     @Override
     public boolean checkWinner(Move move, Board board) {
-        int row = move.getNewCell().getRow();
+        int row = move.getCell().getRow();
         Symbol symbol = move.getPlayer().getSymbol();
 
         rowMaps.get(row).put(
@@ -36,7 +36,7 @@ public class RowWinningStrategy implements WinningStrategy{
 
     @Override
     public void undoLastMove(Move move, Board board) {
-        int row = move.getNewCell().getRow();;
+        int row = move.getCell().getRow();;
         Symbol symbol = move.getPlayer().getSymbol();
 
         rowMaps.get(row).put(
