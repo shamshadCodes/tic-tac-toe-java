@@ -17,6 +17,10 @@ public class Game {
     private GameStatus gameStatus;
     private List<WinningStrategy> winningStrategies;
 
+    public static Builder getBuilder(){
+        return new Builder();
+    }
+
     private Game(int dimension, List<Player> players, List<WinningStrategy> winningStrategies) {
         this.board = new Board(dimension);
         this.players = players;
@@ -27,8 +31,133 @@ public class Game {
         this.winningStrategies = winningStrategies;
     }
 
-    public static Builder getBuilder(){
-        return new Builder();
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public int getPlayerTurnIndex() {
+        return playerTurnIndex;
+    }
+
+    public void setPlayerTurnIndex(int playerTurnIndex) {
+        this.playerTurnIndex = playerTurnIndex;
+    }
+
+    public List<Move> getMoves() {
+        return moves;
+    }
+
+    public void setMoves(List<Move> moves) {
+        this.moves = moves;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setWinner(Player winner) {
+        this.winner = winner;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public void setGameStatus(GameStatus gameStatus) {
+        this.gameStatus = gameStatus;
+    }
+
+    public List<WinningStrategy> getWinningStrategies() {
+        return winningStrategies;
+    }
+
+    public void setWinningStrategies(List<WinningStrategy> winningStrategies) {
+        this.winningStrategies = winningStrategies;
+    }
+
+    public void printResult() {
+        if (gameStatus.equals(GameStatus.CONCLUDED)) {
+            System.out.println("Game has concluded.");
+            System.out.println("Winner is: " + winner.getName());
+        } else {
+            System.out.println("Game is draw");
+        }
+    }
+
+    public void printBoard() {
+        this.board.print();
+    }
+
+    private boolean validateMove(Cell cell) {
+        int row = cell.getRow();
+        int col = cell.getCol();
+
+        if (row < 0 || col < 0 || row >= board.getDimension() || col >= board.getDimension()) {
+            return false;
+        }
+
+        return board.getBoard().get(row).get(col).getCellState().equals(CellState.FREE);
+    }
+
+    public void makeMove() {
+        Player currentPlayer = players.get(playerTurnIndex);
+        System.out.println("It is " + currentPlayer.getName() + "'s turn.");
+
+
+        Cell proposedCell = currentPlayer.makeMove(board);
+
+        System.out.println("Move made at row: " + proposedCell.getRow() +
+                " col: " + proposedCell.getCol() + ".");
+
+        if (!validateMove(proposedCell)) {
+            System.out.println("Invalid move. Retry.");
+            return;
+        }
+
+        Cell cellInBoard = board.getBoard().get(proposedCell.getRow()).get(proposedCell.getCol());
+        cellInBoard.setCellState(CellState.OCCUPIED);
+        cellInBoard.setPlayer(currentPlayer);
+
+        Move move = new Move(currentPlayer, cellInBoard);
+        moves.add(move);
+
+        if (checkGameWon(currentPlayer, move)) return;
+
+        if (checkDraw()) return;
+
+        playerTurnIndex += 1;
+        playerTurnIndex %= players.size();
+    }
+
+    private boolean checkDraw() {
+        if (moves.size() == board.getDimension() * board.getDimension()) {
+            gameStatus = GameStatus.DRAW;
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkGameWon(Player currentPlayer, Move move) {
+        for (WinningStrategy winningStrategy: winningStrategies) {
+            if (winningStrategy.checkWinner(move, board)) {
+                gameStatus = GameStatus.CONCLUDED;
+                winner = currentPlayer;
+                return true;
+            }
+        }
+        return false;
     }
 
     public static class Builder {
@@ -91,7 +220,7 @@ public class Game {
 
         public Game build() throws InvalidGameParamsException {
             if (!valid()) {
-                throw new InvalidGameParamsException("Invalid params for game");
+                throw new InvalidGameParamsException("Invalid parameters for game. Please try again!");
             }
             return new Game(
                     dimension, players, winningStrategies

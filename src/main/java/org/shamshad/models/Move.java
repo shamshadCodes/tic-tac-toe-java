@@ -17,11 +17,11 @@ public class Move {
         this.player = player;
     }
 
-    public Cell getNewCell() {
+    public Cell getCell() {
         return cell;
     }
 
-    public void setNewCell(Cell cell) {
+    public void setCell(Cell cell) {
         this.cell = cell;
     }
 }

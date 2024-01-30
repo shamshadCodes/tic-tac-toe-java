@@ -19,20 +19,42 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("-------------- Game is starting --------------");
+
+        // Input player's name
+        String playerName = scanner.next();
+
         int dimension = 3;
         List<Player> players = List.of(
-                new Player("John Doe", new Symbol('X'), PlayerType.HUMAN),
+                new Player(playerName, new Symbol('X'), PlayerType.HUMAN),
                 new BotPlayer("Computer", new Symbol('O'), BotDifficultyLevel.EASY)
         );
         List<WinningStrategy> winningStrategies = List.of(
+                new ColumnWinningStrategy(dimension, players),
+                new RowWinningStrategy(dimension, players),
+                new DiagonalWinningStrategy(players)
         );
-
 
         try{
             game = gameController.createGame(dimension, players, winningStrategies);
         } catch (InvalidGameParamsException e) {
-            System.out.println("Seems like the input parameters are incorrect. Please try again!");
+            System.out.println(e.getMessage());
             return;
+        }
+
+        System.out.println("This is how board looks like:");
+        // print board
+        gameController.displayBoard(game);
+        // print if undo
+        System.out.println("Does anyone want to undo? (y/n)");
+        // if yes -> call undo
+        String input = scanner.next();
+
+        if (input.equalsIgnoreCase("y")) {
+            gameController.undo(game);
+        } else {
+            // move next player
+            gameController.makeMove(game);
         }
     }
 }

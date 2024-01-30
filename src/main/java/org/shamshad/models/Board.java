@@ -26,11 +26,15 @@ public class Board {
         this.dimension = dimension;
     }
 
-    public List<List<Cell>> getMatrix() {
+    public List<List<Cell>> getBoard() {
         return board;
     }
 
-    public void setMatrix(List<List<Cell>> board) {
+    public void setBoard(List<List<Cell>> board) {
         this.board = board;
+    }
+
+    public void print(){
+
     }
 }

@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 public class ColumnWinningStrategy implements WinningStrategy{
-    private List<Map<Symbol, Integer>> columnMaps;
+    private final List<Map<Symbol, Integer>> columnMaps;
 
-    public ColumnWinningStrategy(int size, List<Player> players) {
+    public ColumnWinningStrategy(int dimension, List<Player> players) {
         columnMaps = new ArrayList<>();
-        for (int i = 0; i < size; ++i) {
+        for (int i = 0; i < dimension; ++i) {
             columnMaps.add(new HashMap<>());
             for (Player player: players) {
                 columnMaps.get(i).put(player.getSymbol(), 0);
